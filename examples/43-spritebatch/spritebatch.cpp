@@ -8,7 +8,7 @@
 #include "common.h"
 #include "bgfx_utils.h"
 #include "imgui/imgui.h"
-#include "spritebatch.hpp"
+#include <spritebatch.hpp>
 
 namespace
 {
@@ -50,10 +50,14 @@ public:
 			);
 
 		imguiCreate();
+
+		spriteBatch.create();
 	}
 
 	int shutdown() override
 	{
+		spriteBatch.destroy();
+
 		imguiDestroy();
 
 		bgfx::shutdown();
@@ -83,6 +87,10 @@ public:
 			// This dummy draw call is here to make sure that view 0 is cleared
 			// if no other draw calls are submitted to view 0.
 			bgfx::touch(0);
+
+			spriteBatch.begin();
+
+			spriteBatch.end();
 
 			imguiEndFrame();
 			// Advance to next frame. Rendering thread will be kicked to
